@@ -1,4 +1,4 @@
-from PIL import Image, ImageFilter
+from PIL import Image
 from binascii import a2b_base64
 import numpy as np
 import json
