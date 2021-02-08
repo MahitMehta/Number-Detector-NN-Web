@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/index.css')}}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
+    <script src="{{url_for('static', filename='js/index.js')}}" defer></script>
+    <title>Number Detector</title>
+</head>
+<body>
+    <h1 class="title">Number Detector</h1>
+    <div class="board">
+        <div id="drawing-board">
+            <button class="clear-board">Clear</button>
+        </div>
+    </div>
+    <input type="text" class="correct-number" placeholder="Correct Number"/>
+    <button class="guess-button">Guess Number</button>
+    <p class="guess"></p>
+</body>
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/drawingboard.js/0.4.6/drawingboard.min.js"></script>
+</html>

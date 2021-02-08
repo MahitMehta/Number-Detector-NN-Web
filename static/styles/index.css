@@ -1,0 +1,120 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #111111;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.title {
+  color: white;
+  font-size: clamp(25px, 2vw, 2vw);
+  font-family: "Hammersmith One";
+}
+
+#drawing-board {
+  margin: 2vw;
+  border: 0.25vw solid white;
+  min-width: 250px;
+  min-height: 250px;
+  width: 25vw;
+  height: 25vw;
+  border-radius: 5%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.guess-button {
+  min-width: 150px;
+  width: 15vw;
+  border-radius: 0.5vw;
+  background-color: #240050;
+  color: white;
+  font-size: clamp(1rem, 1vw, 1vw);
+  font-family: "Hammersmith One";
+  margin: 1vw;
+  border: 0.25vw solid white;
+  min-height: 35px;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  position: relative;
+}
+
+.guess-button::after {
+  content: "";
+  transition: 250ms;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.guess-button:hover::after {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.clear-board {
+  margin: 10px;
+  font-family: "Hammersmith One";
+  color: white;
+  padding: 5px;
+  border: 2px solid white;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  border-radius: 5px;
+  position: absolute;
+}
+
+.guess {
+  color: white;
+  font-family: "Hammersmith One";
+  margin: 2vw;
+}
+
+.correct-number {
+  min-width: 150px;
+  width: 15vw;
+  border: 0.25vw solid rgba(255, 255, 255, 0.25);
+  background-color: transparent;
+  outline: none;
+  color: white;
+  font-family: "Hammersmith One";
+  min-height: 35px;
+  border-radius: 0.5vw;
+  padding: 0px 10px;
+  text-align: center;
+  font-size: clamp(1rem, 1vw, 1vw);
+}
+
+@media (max-width: 1000px) {
+  #drawing-board {
+    margin: 25px;
+    border: 2px solid white;
+  }
+
+  .correct-number {
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    margin: 10px;
+  }
+
+  .guess-button {
+    border: 2px solid white;
+  }
+
+  .guess {
+    margin: 25px;
+  }
+}
