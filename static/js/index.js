@@ -19,9 +19,13 @@ class Board {
         $(`.drawing-board-canvas`).on("mousedown", () => {
             boardEdited = true;
         })
+        $(`.drawing-board-canvas`).on("touchstart", () => {
+            boardEdited = true;
+        })
     }
     clear() {
         $('.guess').html("");
+        $('.correct-number').val("");
         $(".drawing-board-controls").remove();
         $(".drawing-board-canvas-wrapper").remove();
         this.create();
