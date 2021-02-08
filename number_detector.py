@@ -3,6 +3,22 @@ from binascii import a2b_base64
 import numpy as np
 import json
 from matplotlib import pyplot as plt
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+cred = credentials.Certificate("./service_account.json")
+app = firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+
+def get_data():
+    docRef = db.collection("weights").document("weights-public-web")
+    doc = docRef.get()
+    data = doc.to_dict()
+    weights = json.loads(data["weights"])
+    adjustedCount = data["adjustedCount"]
+    return [weights, adjustedCount]
 
 
 class Activation_Sigmoid:
@@ -11,13 +27,8 @@ class Activation_Sigmoid:
 
 
 class Layer_Dense:
-    def __init__(self, input_neurons, output_neurons, weights_file):
-        # self.weights = np.random.randn(self.input_neurons, self.output_neurons) * 0.10
-        self.weights_file = weights_file
-        with open(self.weights_file, "r") as file:
-            if (file.readable):
-                lists = np.array(json.load(file))
-                self.weights = lists
+    def __init__(self, input_neurons, output_neurons):
+        self.weights, self.adjustedCount = get_data()
         self.input_neurons = input_neurons
         self.output_neurons = output_neurons
         self.biases = np.zeros(output_neurons)
@@ -27,13 +38,13 @@ class Layer_Dense:
 
 
 class Train:
-    def __init__(self, inputs, example_outputs, weights_file):
+    def __init__(self, inputs, example_outputs):
         self.inputs = inputs
-        self.weights_file = weights_file
         self.example_outputs = example_outputs
         _, in_neurons = self.inputs.shape
         _, out_neurons = self.example_outputs.shape
-        self.layer = Layer_Dense(in_neurons, out_neurons, weights_file)
+        self.layer = Layer_Dense(in_neurons, out_neurons)
+        self.adjustedCount = self.layer.adjustedCount
 
     def sigmoid_derivative(self, x):
         return x * (1 - x)
@@ -73,7 +84,7 @@ class Number_Detector:
 
     def detect_number(self):
         PIXEL_COUNT = 784
-        layer_one = Layer_Dense(PIXEL_COUNT, 10, "weights_final.json")
+        layer_one = Layer_Dense(PIXEL_COUNT, 10)
         input_data = self.input_data
         layer_one.forward(input_data)
         output = layer_one.output
@@ -99,10 +110,12 @@ class Number_Detector:
         input_data = np.array([self.input_data])
         example_outputs = np.zeros((1, 10))
         example_outputs[0][label] = 1
-        trained_weights = Train(
-            input_data, example_outputs, "weights_final.json").basic()
-        with open("weights_final.json", "w") as file:
-            lists = trained_weights.tolist()
-            json_str = json.dumps(lists)
-            if (file.writable):
-                file.write(json_str)
+        train = Train(
+            input_data, example_outputs)
+        trained_weights = train.basic()
+        adjustedCount = train.adjustedCount
+        adjustedCount += 1
+        lists = trained_weights.tolist()
+        json_str = json.dumps(lists)
+        data = {"weights": json_str, "adjustedCount": adjustedCount}
+        db.collection('weights').document('weights-public-web').set(data)
